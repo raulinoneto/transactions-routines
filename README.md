@@ -4,8 +4,6 @@ challenged and excited to do it.
 In this challenge I forced myself to apply the greater quantity of my knowledge and best pratices that I know, sometimes
 I couldn't apply these things, but I think that what have at the test sounds great.
 
-## Summary
-1. [Project Organization]()
 
 ## Instalation
 Requirements:
