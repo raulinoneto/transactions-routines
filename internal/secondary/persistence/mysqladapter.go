@@ -33,3 +33,36 @@ func (m *MySqlAdapter) Open() *sql.DB {
 	}
 	return db
 }
+
+func (m *MySqlAdapter) Exec(query string, args ...string) (int, error) {
+	db := m.Open()
+	defer db.Close()
+	tx, err := db.Begin()
+	if err != nil {
+		return 0, err
+	}
+	result, err := tx.Exec(query, args)
+	if err != nil {
+		return 0, err
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return int(id), tx.Commit()
+}
+
+func (m *MySqlAdapter) Query(query string, args ...string) (*sql.Row, error) {
+	db := m.Open()
+	defer db.Close()
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	result := tx.QueryRow("INSERT INTO " + accountTableName + " () VALUES ()")
+	err = tx.Commit()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}

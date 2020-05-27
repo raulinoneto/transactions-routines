@@ -14,12 +14,29 @@ type AccountMySqlAdapter struct {
 	driver *MySqlAdapter
 }
 
+var accountTableName = "account"
+
 func NewAccountMySqlAdapter(driver *MySqlAdapter) AccountAdapter {
 	return &AccountMySqlAdapter{driver}
 }
 
 func (ma *AccountMySqlAdapter) CreateAccount(account accounts.Account) error {
-	return nil
+	db := ma.driver.Open()
+	defer db.Close()
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	result, err := tx.Exec("INSERT INTO " + accountTableName + " () VALUES ()")
+	if err != nil {
+		return err
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return err
+	}
+	account.SetID(int(id))
+	return tx.Commit()
 }
 
 func (ma *AccountMySqlAdapter) GetAccount(id int) (accounts.Account, error) {

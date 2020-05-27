@@ -10,8 +10,9 @@ import (
 
 func main() {
 	c := new(container.Container)
-
+	log.Println("STARTING OBSERVER")
 	c.GetTransactionsObserverAdapter().Observe()
+	log.Println("OBSERVER STARTED")
 
 	log.Println("SERVER IS STARTING")
 	ha := c.GetHTTPAdapter(routes.GetRoutes(c))
