@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/raulinoneto/transactions-routines/internal/primary/rx"
+	"github.com/raulinoneto/transactions-routines/internal/primary/observer"
 	"log"
 	"os"
 
@@ -12,7 +12,7 @@ import (
 func main() {
 	c := new(container.Container)
 	log.Println("STARTING OBSERVER")
-	go rx.Observe(
+	go observer.Observe(
 		c.GetTransactionsObserverAdapter().GetChannel(),
 		c.GetTransactionsService(),
 	)

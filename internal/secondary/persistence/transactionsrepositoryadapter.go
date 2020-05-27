@@ -2,7 +2,6 @@ package persistence
 
 import (
 	"errors"
-	"fmt"
 	"github.com/raulinoneto/transactions-routines/internal/apierror"
 	"github.com/raulinoneto/transactions-routines/pkg/domains/transactions"
 	"net/http"
@@ -12,10 +11,10 @@ type TransactionsMySqlAdapter struct {
 	driver *MySqlAdapter
 }
 
-const InsufficientFoundsErrorCode = "account.insuficient_founds"
+const InsufficientFoundsErrorCode = "account.insufficient_founds"
 
 var (
-	InsufficientFoundsError = errors.New("Invalid Document ")
+	InsufficientFoundsError = errors.New("Insufficient Founds ")
 	transactionTableName    = "transactions"
 )
 
@@ -25,10 +24,7 @@ func NewTransactionsMySqlAdapter(driver *MySqlAdapter) transactions.TransactionR
 
 func (ma *TransactionsMySqlAdapter) CreateTransaction(transaction transactions.Transaction) error {
 	id, err := ma.driver.exec(
-		fmt.Sprintf(""+
-			"INSERT INTO %s (account_id, amount, operation_type) VALUES (?,?,?)",
-			transactionTableName,
-		),
+		"INSERT INTO "+transactionTableName+" (account_id, amount, operation_type) VALUES (?,?,?)",
 		transaction.GetAccountID(), transaction.GetAmount(), transaction.GetOperationType(),
 	)
 	if err != nil {
@@ -40,10 +36,7 @@ func (ma *TransactionsMySqlAdapter) CreateTransaction(transaction transactions.T
 
 func (ma *TransactionsMySqlAdapter) CheckLimit(accountId int, value float64) error {
 	var limit float64
-	result, err := ma.driver.query(
-		fmt.Sprintf("SELECT COUNT(amount) as limit FROM %s WHERE account_id=?", accountTableName),
-		accountId,
-	)
+	result, err := ma.driver.query("SELECT COALESCE(SUM(amount),0) FROM "+transactionTableName+" WHERE account_id=?", accountId)
 	if err != nil {
 		return err
 	}
@@ -51,7 +44,7 @@ func (ma *TransactionsMySqlAdapter) CheckLimit(accountId int, value float64) err
 	if err != nil {
 		return err
 	}
-	if limit > value {
+	if limit < value {
 		return apierror.NewWarning(
 			InsufficientFoundsErrorCode,
 			InsufficientFoundsError.Error(),

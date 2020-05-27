@@ -35,7 +35,7 @@ func (ma *AccountMySqlAdapter) CreateAccount(account accounts.Account) error {
 
 func (ma *AccountMySqlAdapter) GetAccount(id int) (accounts.Account, error) {
 	var account *AccountsModel
-	result, err := ma.driver.query("SELECT document_number FROM " + accountTableName + " WHERE id=1")
+	result, err := ma.driver.query("SELECT document_number FROM "+accountTableName+" WHERE id=?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -49,10 +49,7 @@ func (ma *AccountMySqlAdapter) GetAccount(id int) (accounts.Account, error) {
 }
 
 func (ma *AccountMySqlAdapter) BlockAccount(id int) error {
-	id, err := ma.driver.exec(
-		"UPDATE "+accountTableName+" SET is_blocked=? WHERE id=?",
-		1, id,
-	)
+	id, err := ma.driver.exec("UPDATE "+accountTableName+" SET is_blocked=? WHERE id=?", 1, id)
 	if err != nil {
 		return err
 	}
@@ -60,10 +57,7 @@ func (ma *AccountMySqlAdapter) BlockAccount(id int) error {
 }
 
 func (ma *AccountMySqlAdapter) UnlockAccount(id int) {
-	id, err := ma.driver.exec(
-		"UPDATE "+accountTableName+" SET is_blocked=? WHERE id=?",
-		0, id,
-	)
+	id, err := ma.driver.exec("UPDATE "+accountTableName+" SET is_blocked=? WHERE id=?", 0, id)
 	if err != nil {
 		log.Println(err)
 	}
@@ -71,10 +65,7 @@ func (ma *AccountMySqlAdapter) UnlockAccount(id int) {
 
 func (ma *AccountMySqlAdapter) AccountIsBlocked(id int) (bool, error) {
 	var isBlocked int
-	result, err := ma.driver.query(
-		"SELECT is_blocked FROM "+accountTableName+" a WHERE id=?", id,
-		id,
-	)
+	result, err := ma.driver.query("SELECT is_blocked FROM "+accountTableName+" a WHERE id=?", id)
 	if err != nil {
 		return false, err
 	}

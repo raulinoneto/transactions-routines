@@ -25,20 +25,19 @@ func (s Service) SaveTransaction(t Transaction) error {
 		s.observer.Add(t)
 		return nil
 	}
-
-	if t.GetOperationType() != core.OperationsTypeDeposit && t.GetAmount() > 0 {
-		t.SetAmount(0 - t.GetAmount())
-	}
-
 	err = s.accountsRepo.BlockAccount(t.GetAccountID())
 	if err != nil {
 		return err
 	}
-
-	err = s.transactionsRepo.CheckLimit(t.GetAccountID(), t.GetAmount())
-	if err != nil {
-		return err
-	}
 	defer s.accountsRepo.UnlockAccount(t.GetAccountID())
+
+	if t.GetOperationType() != core.OperationTypeDeposit {
+		if err = s.transactionsRepo.CheckLimit(t.GetAccountID(), t.GetAmount()); err != nil {
+			return err
+		}
+		if t.GetAmount() > 0 {
+			t.SetAmount(-1 * t.GetAmount())
+		}
+	}
 	return s.transactionsRepo.CreateTransaction(t)
 }
