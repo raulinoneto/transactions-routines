@@ -4,7 +4,7 @@ compile:
 run:
 	make compile
 	./bin/transactionsroutines
-clearconfigs:
+clear:
 	rm -rf ./bin -v
 test:
 	go test -coverpkg=./... ./...
