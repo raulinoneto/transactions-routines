@@ -1,0 +1,35 @@
+version: "3.1"
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+      umespaco-network:
+        ipv4_address: 10.0.5.12
+  app:
+    env_file:
+      - .env.local
+    container_name: umespaco-api
+    build: ./build/docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/var/app
+    ports:
+      - 8080:8080
+    environment:
+      - VOLUME_APP=$PWD
+    networks:
+      umespaco-network:
+        ipv4_address: 10.0.5.10
+
+networks:
+  umespaco-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.5.10/24
