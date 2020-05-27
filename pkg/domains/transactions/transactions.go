@@ -30,6 +30,6 @@ type (
 	}
 
 	TransactionObserver interface {
-		Add(t Transaction)
+		Add(t interface{})
 	}
 )

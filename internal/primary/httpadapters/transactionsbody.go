@@ -3,11 +3,11 @@ package httpadapters
 import "time"
 
 type TransactionBody struct {
-	ID            int
-	AccountID     int
-	OperationType int
-	Amount        float64
-	EventDate     time.Time
+	ID            int       `json:"id"`
+	AccountID     int       `json:"account_id"`
+	OperationType int       `json:"operation_type_id"`
+	Amount        float64   `json:"amount"`
+	EventDate     time.Time `json:"event_date"`
 }
 
 func (tb *TransactionBody) GetID() int {

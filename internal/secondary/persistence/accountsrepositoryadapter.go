@@ -16,7 +16,7 @@ type AccountMySqlAdapter struct {
 	driver *MySqlAdapter
 }
 
-var accountTableName = "account"
+var accountTableName = "accounts"
 
 func NewAccountMySqlAdapter(driver *MySqlAdapter) AccountAdapter {
 	return &AccountMySqlAdapter{driver}

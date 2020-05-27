@@ -3,7 +3,7 @@ compile:
 	chmod 0777 bin/* -v
 run:
 	make compile
-	./bin/umespaco
+	./bin/transactionsroutines
 clearconfigs:
 	rm -rf ./bin -v
 test:

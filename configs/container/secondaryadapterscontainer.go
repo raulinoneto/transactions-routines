@@ -1,8 +1,8 @@
 package container
 
 import (
-	"github.com/raulinoneto/transactions-routines/internal/secondary/persistence"
 	"github.com/raulinoneto/transactions-routines/internal/secondary/observer"
+	"github.com/raulinoneto/transactions-routines/internal/secondary/persistence"
 	"github.com/raulinoneto/transactions-routines/pkg/domains/transactions"
 	"os"
 )
@@ -38,7 +38,7 @@ func (c *Container) GetTransactionsMySqlAdapter() transactions.TransactionReposi
 
 func (c *Container) GetTransactionsObserverAdapter() *observer.TransactionsObserverAdapter {
 	if c.transactionObserver == nil {
-		c.transactionObserver = observer.NewTransactionsObserverAdapter(c.GetTransactionsService())
+		c.transactionObserver = observer.NewTransactionsObserverAdapter()
 	}
 	return c.transactionObserver
 }

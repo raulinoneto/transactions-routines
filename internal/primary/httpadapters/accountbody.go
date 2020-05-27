@@ -1,7 +1,8 @@
 package httpadapters
 
 type AccountBody struct {
-	ID, DocumentNumber int
+	ID             int `json:"id"`
+	DocumentNumber int `json:"document_number"`
 }
 
 func NewAccount(id, documentNumber int) *AccountBody {

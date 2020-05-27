@@ -15,18 +15,18 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8081
+      - 8080:8080
     networks:
       transactions-network:
         ipv4_address: 10.0.5.12
   app:
-    container_name: umespaco-api
+    container_name: transactions-api
     build: ./build/docker
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - .:/var/app
     ports:
-      - 8080:8080
+      - 8081:8081
     env_file:
       - .env.local
     networks:
