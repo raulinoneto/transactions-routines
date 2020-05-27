@@ -17,13 +17,16 @@ func NewMySqlAdapter(driver, user, password, addr, port, dbname string) *MySqlAd
 }
 
 func (m *MySqlAdapter) TestConnection() {
-	db := m.Open()
+	db := m.open()
+	if err := db.Ping(); err != nil {
+		log.Fatal("Couldn't close database connection:", err)
+	}
 	if err := db.Close(); err != nil {
-		log.Fatal("Couldn't close database connection")
+		log.Fatal("Couldn't close database connection:", err)
 	}
 }
 
-func (m *MySqlAdapter) Open() *sql.DB {
+func (m *MySqlAdapter) open() *sql.DB {
 	db, err := sql.Open(
 		m.driver,
 		fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", m.user, m.password, m.addr, m.port, m.dbname),
@@ -34,8 +37,8 @@ func (m *MySqlAdapter) Open() *sql.DB {
 	return db
 }
 
-func (m *MySqlAdapter) Exec(query string, args ...string) (int, error) {
-	db := m.Open()
+func (m *MySqlAdapter) exec(query string, args ...interface{}) (int, error) {
+	db := m.open()
 	defer closeDB(db)
 	tx, err := db.Begin()
 	if err != nil {
@@ -43,17 +46,19 @@ func (m *MySqlAdapter) Exec(query string, args ...string) (int, error) {
 	}
 	result, err := tx.Exec(query, args)
 	if err != nil {
+		_ = tx.Rollback()
 		return 0, err
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
+		_ = tx.Rollback()
 		return 0, err
 	}
 	return int(id), tx.Commit()
 }
 
-func (m *MySqlAdapter) Query(query string, args ...string) (*sql.Row, error) {
-	db := m.Open()
+func (m *MySqlAdapter) query(query string, args ...interface{}) (*sql.Row, error) {
+	db := m.open()
 	defer closeDB(db)
 	tx, err := db.Begin()
 	if err != nil {
@@ -62,6 +67,7 @@ func (m *MySqlAdapter) Query(query string, args ...string) (*sql.Row, error) {
 	result := tx.QueryRow(query, args)
 	err = tx.Commit()
 	if err != nil {
+		_ = tx.Rollback()
 		return nil, err
 	}
 	return result, nil
