@@ -13,7 +13,7 @@ func NewService(
 	accountsRepo AccountsRepository,
 	observer TransactionObserver,
 ) *Service {
-	return &Service{}
+	return &Service{transactionsRepo, accountsRepo, observer}
 }
 
 func (s Service) SaveTransaction(t Transaction) error {
@@ -25,13 +25,16 @@ func (s Service) SaveTransaction(t Transaction) error {
 		s.observer.Add(t)
 		return nil
 	}
+
 	if t.GetOperationType() != core.OperationsTypeDeposit && t.GetAmount() > 0 {
 		t.SetAmount(0 - t.GetAmount())
 	}
+
 	err = s.accountsRepo.BlockAccount(t.GetAccountID())
 	if err != nil {
 		return err
 	}
+
 	err = s.transactionsRepo.CheckLimit(t.GetAccountID(), t.GetAmount())
 	if err != nil {
 		return err

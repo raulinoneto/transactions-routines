@@ -3,6 +3,7 @@ package observer
 import (
 	"github.com/raulinoneto/transactions-routines/pkg/domains/transactions"
 	"github.com/reactivex/rxgo/v2"
+	"time"
 )
 
 type TransactionsObserverAdapter struct {
@@ -21,6 +22,10 @@ func (o *TransactionsObserverAdapter) Add(transaction transactions.Transaction) 
 func (o *TransactionsObserverAdapter) Observe() {
 	observable := rxgo.FromChannel(o.channel)
 	for item := range observable.Observe() {
-		o.service.SaveTransaction(item.V.(transactions.Transaction))
+		time.Sleep(time.Second * 2)
+		err := o.service.SaveTransaction(item.V.(transactions.Transaction))
+		if err != nil {
+			// ToDo Retry or notify
+		}
 	}
 }
