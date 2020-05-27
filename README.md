@@ -27,14 +27,14 @@ make migrate
 * [github.com/reactivex/rxgo/v2](github.com/reactivex/rxgo/v2) - Was used to store blocked accounts that are in processing. 
 
 ### Transactions Flow
-![Transaction Flow Diagram](https://github.com/raulinoneto/transactions-routines/images/transaction-diagram.png "Transaction Flow Diagram")
+![Transaction Flow Diagram](https://github.com/raulinoneto/transactions-routines/blob/master/images/transaction-diagram.png "Transaction Flow Diagram")
 
 ### Hexagonal Architecture
 Hexagonal Architecture consists in to divide an application in layers with your resposabilities and to focus in the 
 logical business layer, the domain
 Hexagonal Architecture are called "Ports and Adapters Pattern" too.
 
-![Hexagonal Architecture](https://github.com/raulinoneto/transactions-routines/images/hexagonal-architecture.png "Hexagonal Architecture")
+![Hexagonal Architecture](https://github.com/raulinoneto/transactions-routines/blob/master/images/hexagonal-architecture.png "Hexagonal Architecture")
 
 ### Source tree explained
 ```text
