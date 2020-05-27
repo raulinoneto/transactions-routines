@@ -15,3 +15,7 @@ func NewTransactionsMySqlAdapter(driver *MySqlAdapter) transactions.TransactionR
 func (ma *TransactionsMySqlAdapter) CreateTransaction(transaction transactions.Transaction) error {
 	return nil
 }
+
+func (ma *TransactionsMySqlAdapter) CheckLimit(accountID int, value float64) error {
+	return nil
+}

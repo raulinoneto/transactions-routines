@@ -20,6 +20,7 @@ type (
 
 	TransactionRepository interface {
 		CreateTransaction(Transaction) error
+		CheckLimit(accountID int, value float64) error
 	}
 
 	AccountsRepository interface {

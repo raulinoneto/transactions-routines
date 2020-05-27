@@ -32,6 +32,10 @@ func (s Service) SaveTransaction(t Transaction) error {
 	if err != nil {
 		return err
 	}
+	err = s.transactionsRepo.CheckLimit(t.GetAccountID(), t.GetAmount())
+	if err != nil {
+		return err
+	}
 	defer s.accountsRepo.UnlockAccount(t.GetAccountID())
 	return s.transactionsRepo.CreateTransaction(t)
 }
