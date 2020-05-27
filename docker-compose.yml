@@ -1,0 +1,42 @@
+version: "3.1"
+
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    env_file:
+      - .env.local
+    networks:
+      transactions-network:
+        ipv4_address: 10.0.5.11
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      transactions-network:
+        ipv4_address: 10.0.5.12
+  app:
+    container_name: transactions-api
+    build: ./build/docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/var/app
+    ports:
+      - 8081:8081
+    env_file:
+      - .env.local
+    networks:
+      transactions-network:
+        ipv4_address: 10.0.5.10
+
+networks:
+  transactions-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.5.10/24
