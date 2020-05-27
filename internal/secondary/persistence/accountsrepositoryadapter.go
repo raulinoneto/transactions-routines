@@ -1,7 +1,6 @@
 package persistence
 
 import (
-	"fmt"
 	"github.com/raulinoneto/transactions-routines/pkg/domains/accounts"
 	"github.com/raulinoneto/transactions-routines/pkg/domains/transactions"
 	"log"
@@ -24,7 +23,7 @@ func NewAccountMySqlAdapter(driver *MySqlAdapter) AccountAdapter {
 
 func (ma *AccountMySqlAdapter) CreateAccount(account accounts.Account) error {
 	id, err := ma.driver.exec(
-		fmt.Sprintf("INSERT INTO %s (document_number, is_blocked) VALUES (?,?)", accountTableName),
+		"INSERT INTO "+accountTableName+" (document_number, is_blocked) VALUES (?,?)",
 		account.GetDocumentNumber(), 0,
 	)
 	if err != nil {
@@ -36,10 +35,7 @@ func (ma *AccountMySqlAdapter) CreateAccount(account accounts.Account) error {
 
 func (ma *AccountMySqlAdapter) GetAccount(id int) (accounts.Account, error) {
 	var account *AccountsModel
-	result, err := ma.driver.query(
-		fmt.Sprintf("SELECT document_number FROM %s WHERE id=?", accountTableName),
-		id,
-	)
+	result, err := ma.driver.query("SELECT document_number FROM " + accountTableName + " WHERE id=1")
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +50,7 @@ func (ma *AccountMySqlAdapter) GetAccount(id int) (accounts.Account, error) {
 
 func (ma *AccountMySqlAdapter) BlockAccount(id int) error {
 	id, err := ma.driver.exec(
-		fmt.Sprintf("UPDATE %s SET is_blocked=? WHERE id=?", accountTableName),
+		"UPDATE "+accountTableName+" SET is_blocked=? WHERE id=?",
 		1, id,
 	)
 	if err != nil {
@@ -65,7 +61,7 @@ func (ma *AccountMySqlAdapter) BlockAccount(id int) error {
 
 func (ma *AccountMySqlAdapter) UnlockAccount(id int) {
 	id, err := ma.driver.exec(
-		fmt.Sprintf("UPDATE %s SET is_blocked=? WHERE id=?", accountTableName),
+		"UPDATE "+accountTableName+" SET is_blocked=? WHERE id=?",
 		0, id,
 	)
 	if err != nil {
@@ -76,7 +72,7 @@ func (ma *AccountMySqlAdapter) UnlockAccount(id int) {
 func (ma *AccountMySqlAdapter) AccountIsBlocked(id int) (bool, error) {
 	var isBlocked int
 	result, err := ma.driver.query(
-		fmt.Sprintf("SELECT is_blocked FROM %s WHERE id=?", accountTableName),
+		"SELECT is_blocked FROM "+accountTableName+" a WHERE id=?", id,
 		id,
 	)
 	if err != nil {

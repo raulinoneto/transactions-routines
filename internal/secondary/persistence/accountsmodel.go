@@ -1,8 +1,9 @@
 package persistence
 
 type AccountsModel struct {
-	ID, DocumentNumber int
-	IsBlocked          uint8
+	ID             int `json:"id"`
+	DocumentNumber int `json:"document_number"`
+	isBlocked      uint8
 }
 
 func NewAccount(id, documentNumber int, isBlocked uint8) *AccountsModel {

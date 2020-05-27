@@ -16,3 +16,5 @@ run-docker:
 run-docker-clean:
 	docker-compose build --no-cache
 	make run-docker
+migrate:
+	docker exec -i transactions-routines_db_1 mysql -uroot -proot < ./scripts/database.sql

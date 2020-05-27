@@ -44,7 +44,7 @@ func (m *MySqlAdapter) exec(query string, args ...interface{}) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	result, err := tx.Exec(query, args)
+	result, err := tx.Exec(query, args...)
 	if err != nil {
 		_ = tx.Rollback()
 		return 0, err
@@ -60,16 +60,7 @@ func (m *MySqlAdapter) exec(query string, args ...interface{}) (int, error) {
 func (m *MySqlAdapter) query(query string, args ...interface{}) (*sql.Row, error) {
 	db := m.open()
 	defer closeDB(db)
-	tx, err := db.Begin()
-	if err != nil {
-		return nil, err
-	}
-	result := tx.QueryRow(query, args)
-	err = tx.Commit()
-	if err != nil {
-		_ = tx.Rollback()
-		return nil, err
-	}
+	result := db.QueryRow(query, args...)
 	return result, nil
 }
 
