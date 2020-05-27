@@ -2,8 +2,6 @@ compile:
 	env GOOS=linux go build -ldflags="-s -w" -o bin/transactionsroutines cmd/http/*.go
 	chmod 0777 bin/* -v
 run:
-	chmod 0777 bin/* -v
-	pkill umespaco &
 	make compile
 	./bin/umespaco
 clearconfigs:
