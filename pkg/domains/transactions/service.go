@@ -16,6 +16,7 @@ func NewService(
 	return &Service{transactionsRepo, accountsRepo, observer}
 }
 
+// Verify all
 func (s Service) SaveTransaction(t Transaction) error {
 	isBlocked, err := s.accountsRepo.AccountIsBlocked(t.GetAccountID())
 	if err != nil {
