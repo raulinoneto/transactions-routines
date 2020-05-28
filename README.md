@@ -18,6 +18,12 @@ make run-docker-clean
 make migrate
 ```
 
+Tests:
+```shell script
+make test
+make test-api
+```
+
 ## Project Organization 
 
 ### Third Part Packages

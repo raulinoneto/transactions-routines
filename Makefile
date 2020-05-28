@@ -8,6 +8,8 @@ clear:
 	rm -rf ./bin -v
 test:
 	go test -coverpkg=./... ./...
+test-api:
+	docker exec -i transactions-api newman run api/Transactions.postman_collection.json
 test-report:
 	go test -coverpkg=./... -coverprofile=coverage.out -covermode=count ./...
 	go tool cover -html=coverage.out
@@ -17,4 +19,4 @@ run-docker-clean:
 	docker-compose build --no-cache
 	make run-docker
 migrate:
-	docker exec -i transactions-routines_db_1 mysql -uroot -proot < ./scripts/database.sql
+	docker exec -i transactions-mysql mysql -uroot -proot < ./scripts/database.sql

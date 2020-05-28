@@ -23,7 +23,7 @@ func (u *AccountsHttpAdapter) CreateAccount(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	err := u.service.SaveAccount(a)
-	BuildOkResponse(a, err, w)
+	BuildCreatedResponse(a, err, w)
 }
 
 func (u *AccountsHttpAdapter) GetAccount(w http.ResponseWriter, r *http.Request) {
