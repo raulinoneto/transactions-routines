@@ -26,6 +26,7 @@ var errorDocumentInvalid = apierror.NewWarning(
 	InvalidDocumentNumberError,
 )
 
+// Logic business to save an account
 func (s *Service) SaveAccount(a Account) error {
 	if !documentNumberIsValid(a.GetDocumentNumber()) {
 		return errorDocumentInvalid
