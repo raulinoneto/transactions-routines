@@ -91,9 +91,9 @@ var tCases = map[string]tCase{
 }
 
 func TestService_SaveTransaction(t *testing.T) {
-	for name, payload := range tCases {
-		err := payload.service.SaveTransaction(new(TransactionMock))
-		if err != nil && err.Error() != payload.err.Error() {
+	for name, tCase := range tCases {
+		err := tCase.service.SaveTransaction(new(TransactionMock))
+		if err != nil && err.Error() != tCase.err.Error() {
 			t.Errorf("Invalid return in case %s\n returned: %+v", name, err)
 		}
 	}

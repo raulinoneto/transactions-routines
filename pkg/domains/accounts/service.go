@@ -19,14 +19,16 @@ func NewService(repo Repository) *Service {
 	return &Service{repo}
 }
 
+var errorDocumentInvalid = apierror.NewWarning(
+	InvalidDocumentNumberErrorCode,
+	InvalidDocumentNumberError.Error(),
+	http.StatusBadRequest,
+	InvalidDocumentNumberError,
+)
+
 func (s *Service) SaveAccount(a Account) error {
 	if !documentNumberIsValid(a.GetDocumentNumber()) {
-		return apierror.NewWarning(
-			InvalidDocumentNumberErrorCode,
-			InvalidDocumentNumberError.Error(),
-			http.StatusBadRequest,
-			InvalidDocumentNumberError,
-		)
+		return errorDocumentInvalid
 	}
 	return s.repo.CreateAccount(a)
 }

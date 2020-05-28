@@ -58,28 +58,17 @@ func (a *AccountsRepositoryMock) AccountIsBlocked(int) (bool, error) {
 	return false, errorIsBlocked
 }
 
-type TransactionObserverMock struct{}
+type TransactionObserverMock int
 
 func (TransactionObserverMock) Add(_ interface{}) {}
 
-type TransactionMock struct {
-}
+type TransactionMock int
 
-func (TransactionMock) GetID() int {
-	return 1
-}
-func (TransactionMock) GetAccountID() int {
-	return 1
-}
-func (TransactionMock) GetOperationType() int {
-	return 1
-}
-func (TransactionMock) GetAmount() float64 {
-	return 1
-}
-func (TransactionMock) GetEventDate() time.Time {
-	return time.Now()
-}
+func (TransactionMock) GetID() int              { return 1 }
+func (TransactionMock) GetAccountID() int       { return 1 }
+func (TransactionMock) GetOperationType() int   { return 1 }
+func (TransactionMock) GetAmount() float64      { return 1 }
+func (TransactionMock) GetEventDate() time.Time { return time.Now() }
 
 func (TransactionMock) SetID(int)              {}
 func (TransactionMock) SetAccountID(int)       {}
