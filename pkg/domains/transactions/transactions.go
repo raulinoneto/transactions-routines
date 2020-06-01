@@ -22,7 +22,6 @@ type (
 	// Repository Behavior
 	TransactionRepository interface {
 		CreateTransaction(Transaction) error
-		CheckLimit(accountID int, value float64) error
 	}
 
 	// Account behavior needed to logical business
@@ -30,6 +29,8 @@ type (
 		BlockAccount(int) error
 		UnlockAccount(int)
 		AccountIsBlocked(int) (bool, error)
+		CheckLimit(accountID int, value float64) error
+		ChangeLimit(amount float64, id int) error
 	}
 
 	// Behavior for observer and treat transaction before

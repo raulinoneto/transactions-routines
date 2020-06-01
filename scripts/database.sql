@@ -4,6 +4,7 @@ CREATE TABLE accounts
     id              INT NOT NULL AUTO_INCREMENT,
     document_number INT NOT NULL UNIQUE,
     is_blocked      INT(1) ZEROFILL,
+    available_credit_limit DOUBLE NOT NUll,
     PRIMARY KEY (id)
 );
 

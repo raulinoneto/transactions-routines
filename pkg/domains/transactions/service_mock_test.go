@@ -47,6 +47,8 @@ func (a *AccountsRepositoryMock) BlockAccount(int) error {
 }
 
 func (AccountsRepositoryMock) UnlockAccount(int) {}
+func (AccountsRepositoryMock) ChangeLimit(amount float64, id int) error { return nil}
+func (AccountsRepositoryMock) CheckLimit(accountID int, value float64) error { return nil}
 
 func (a *AccountsRepositoryMock) AccountIsBlocked(int) (bool, error) {
 	switch a.isBlocked {

@@ -33,12 +33,15 @@ func (s Service) SaveTransaction(t Transaction) error {
 	defer s.accountsRepo.UnlockAccount(t.GetAccountID())
 
 	if t.GetOperationType() != core.OperationTypeDeposit {
-		if err = s.transactionsRepo.CheckLimit(t.GetAccountID(), t.GetAmount()); err != nil {
+		if err = s.accountsRepo.CheckLimit(t.GetAccountID(), t.GetAmount()); err != nil {
 			return err
 		}
 		if t.GetAmount() > 0 {
 			t.SetAmount(-1 * t.GetAmount())
 		}
+	}
+	if err:= s.accountsRepo.ChangeLimit(t.GetAmount(), t.GetAccountID()); err != nil {
+		return err
 	}
 	return s.transactionsRepo.CreateTransaction(t)
 }
